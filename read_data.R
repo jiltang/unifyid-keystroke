@@ -1,5 +1,7 @@
 library(jsonlite)
 library(data.table)
+library(dplyr)
+library(plyr)
 
 MAX_USERS <- 1000 # assume max of 1000 users - this makes reading faster
 
@@ -19,3 +21,8 @@ while(!is.null(first)) {
 alldat[sapply(alldat, is.null)] <- NULL
 alldat <- do.call(rbind, alldat)
 fwrite(alldat, "raw_allusers.csv")
+
+alldat$next_char <- lead(alldat$character)
+dat_filt <- alldat[alldat$next_char!="[backspace]" & alldat$character!="[backspace]",]
+phrases <- ddply(dat_filt, .(user, entry), function(df) {paste(as.vector(df$character), collapse="")})
+fwrite(phrases, "phrases.csv")
