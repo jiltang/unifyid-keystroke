@@ -39,17 +39,17 @@ Accuracies per user:
 [1] "accuracy for user 25: 0.738842975206612"
 
 ## Additional Questions
-* If you had one additional day, what would you change or improve to your submission?
+* *If you had one additional day, what would you change or improve to your submission?*
 I would work on improving the approach neural network – with more training time, I could use larger networks and more complicated architectures. One thing I would have liked to try was using a GRU on the data – I attempted to implement this but did not have time to train it.
 
-* How would you modify your solution if the number of users was 1,000 times larger?
+* *How would you modify your solution if the number of users was 1,000 times larger?*
 In this case, I might write the pipeline in a lower-level language so that it could process the data faster or be incorporated more easily into whatever framework the data engineers have set up.
 
-* What insights and takeaways do you have on the distribution of user performance?
+* *What insights and takeaways do you have on the distribution of user performance?*
 The accuracy for each user is pretty uniform.
 
-* What aspect(s) would you change about this challenge?
+* *What aspect(s) would you change about this challenge?*
 It'd be nice if everything weren't piped through JSON files where the next JSON file location comes from the current one.
 
-* What aspect(s) did you enjoy about this challenge?
-This was a lot of fun! I really enjoyed the challenges of working with keystroke data. 
+* *What aspect(s) did you enjoy about this challenge?*
+This was a lot of fun! I really enjoyed the challenges of working with keystroke data.
