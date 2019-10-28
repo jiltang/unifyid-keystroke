@@ -46,7 +46,10 @@ I would work on improving the approach neural network – with more training ti
 In this case, I might write the pipeline in a lower-level language so that it could process the data faster or be incorporated more easily into whatever framework the data engineers have set up.
 
 * What insights and takeaways do you have on the distribution of user performance?
-
+The accuracy for each user is pretty uniform.
 
 * What aspect(s) would you change about this challenge?
+It'd be nice if everything weren't piped through JSON files where the next JSON file location comes from the current one.
+
 * What aspect(s) did you enjoy about this challenge?
+This was a lot of fun! I really enjoyed the challenges of working with keystroke data. 
