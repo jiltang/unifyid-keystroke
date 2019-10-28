@@ -9,7 +9,7 @@ Coding challenge for UnifyID
 ## Description
 `read_data.R` makes raw and processed data from the JSON files. This computes qualified users as well as creates some features based on timing and error rates.
 
-I originally tried to train models on the long datasets, with a matrix for each entry containing all the keystrokes and some additional data. My plan was to use a GRU to create the predictions, as the data is clearly time-correlated. However, this proved to be too slow to train, so I reshaped the data, limiting it to 40 keystrokes. I tried a neural network on this, along with a random forest, which got 74% accuracy.
+I originally tried to train models on the long datasets, with a matrix for each entry containing all the keystrokes and some additional data. My plan was to use a GRU to create the predictions, as the data is clearly time-correlated. However, this proved to be too slow to train, so I reshaped the data, limiting it to 40 keystrokes. I tried a neural network on this, but I ended up going with a random forest, which got 74% accuracy.
 
 Accuracies per user:
 [1] "accuracy for user 1: 0.739393939393939"
