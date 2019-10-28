@@ -50,6 +50,8 @@ print("Calculating new features")
 qual_dat$times = as.POSIXct(qual_dat$typed_at, tz = "UTC", "%Y-%m-%dT%H:%M:%OS") 
 qual_dat$digraph = unlist(tapply(qual_dat$times, list(qual_dat$entry, qual_dat$user),
                             FUN = function(x) c(0, `units<-`(diff(x), "secs"))))
+qual_phrases$user = as.numeric(factor(qual_phrases$user, levels=levels(as.factor(qual_dat$user))))
+qual_dat$user = as.numeric(as.factor(qual_dat$user))
 
 # Get errors
 delete_counts = plyr::count(qual_dat[qual_dat$character=="[backspace]",], c("user", "entry"))
@@ -64,9 +66,26 @@ dt = dt[dt$phrasetime!=0,]
 dt = dt[,c("user", "entry", "phrasetime")]
 
 # Write file with new features
-clean_dat = merge(dt, delete_counts, by=c("user", "entry"))
-clean_dat = merge(clean_dat, qual_phrases, by=c("user", "entry"))
+clean_dat = merge(dt, delete_counts, by=c("user", "entry"), all = TRUE)
+clean_dat$del[is.na(clean_dat$del)] = 0
+clean_dat = merge(clean_dat, qual_phrases, by=c("user", "entry"), all=TRUE)
 clean_dat$text = NULL
-clean_dat = merge(qual_dat, clean_dat, by=c("user", "entry"), all.x=TRUE)
+clean_dat = merge(qual_dat, clean_dat, by=c("user", "entry"), all=TRUE)
+clean_dat$typed_at = NULL
+chars <- unique(c(levels(as.factor(clean_dat$character)), levels(as.factor(clean_dat$next_char))))
+clean_dat$character = as.numeric(factor(clean_dat$character, levels = chars))
+clean_dat$next_char = as.numeric(factor(clean_dat$next_char, levels = chars))
+clean_dat$times = NULL
 fwrite(clean_dat, "qualified_clean.csv", quote = TRUE)
 
+wide_dat = clean_dat
+wide_dat = wide_dat %>% group_by(user, entry) %>% mutate(counter = row_number())
+wide_dat = as.data.table(wide_dat)
+wide_dat = dcast(wide_dat, user + entry ~ counter,
+                   value.var=c("character", "next_char", "digraph"))
+wide_dat = merge(wide_dat, delete_counts, by=c("user", "entry"), all = TRUE)
+wide_dat$del[is.na(wide_dat$del)] = 0
+wide_dat = merge(wide_dat, qual_phrases, by=c("user", "entry"), all=TRUE)
+wide_dat$text = NULL
+wide_dat = merge(wide_dat, dt, by=c("user", "entry"), all=TRUE)
+fwrite(wide_dat, "clean_wide.csv", quote=TRUE)
