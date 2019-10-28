@@ -22,4 +22,16 @@ print("confusion matrix:")
 table(ypred, yreal)
 print("accuracy: ")
 sum(ypred==yreal)/length(yreal)
+print("user level accuracy:")
+for(user in levels(yreal)) {
+  traindat = dat[-train, ]
+  traindat = traindat[traindat$user == user]
+  yreal = traindat$user
+  traindat$user = NULL
+  traindat = na.roughfix(traindat) # impute missing
+  ypred = predict(rf_tree, newdata=traindat)
+  
+  print(paste0("accuracy for user ", user, ": ", sum(ypred==yreal)/length(yreal)))
+}
+
 save(rf_tree, file="randomForest.RData") # Saves the model
